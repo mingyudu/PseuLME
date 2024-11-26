@@ -66,7 +66,7 @@ res = fit_PseuLME(dds,
 
 - **`batch_accessor`**: The name of the column in the metadata (`colData(dds)`) that specifies batch identifiers. This accounts for batch effects in the linear mixed-effects model (e.g., `"assay_id"`).
 
-- **`gene_pct`**: A numeric threshold (between 0 and 1) representing the minimum proportion of cells in which a gene must be expressed to be retained. For example, `gene_pct = 0.05` keeps genes expressed in at least 15% of cells.
+- **`gene_pct`**: A numeric threshold (between 0 and 1) representing the minimum proportion of cells in which a gene must be expressed to be retained. For example, `gene_pct = 0.15` keeps genes expressed in at least 15% of cells.
 
 - **`sample_thres`**: An integer threshold specifying the minimum number of cells required in a sample to include it in the analysis. For example, `sample_thres = 50` retains samples with at least 50 cells.
 
