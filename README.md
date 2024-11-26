@@ -8,7 +8,7 @@
 
 ## Installation
 
-PseuLME depends on several other R packages, including `DESeq2`, `lme4`, `multcomp`, `stats`, and `SummarizedExperiment`. Install the package and its dependencies as follows:
+PseuLME depends on several other R packages, including `DESeq2`, `lme4`, `multcomp`, `stats`, and `SummarizedExperiment`. After installing the dependencies, you can install the package as follows:
 
 ```r
 if(!require(devtools))
