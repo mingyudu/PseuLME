@@ -210,6 +210,8 @@ lme_pvals<-function(dds,condition_accessor,batch_accessor,
   padjs = p.adjust(pvals, method = 'BH')
   df = data.frame(base = base, log2fc = diff, pvals = pvals, padjs = padjs)
   rownames(df) = rownames(dds)
+  df$gene = rownames(df)
+  df = df[order(df$padjs),]
   return(df)
 }
 
