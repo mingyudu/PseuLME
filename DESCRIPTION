@@ -19,5 +19,5 @@ Imports:
   stats, 
   SummarizedExperiment
 Depends:
-  R 
+    R (>= 2.10)
 RoxygenNote: 7.2.3

@@ -26,6 +26,7 @@ After installing the package, check the document of the functions in this R pack
 
 After put the raw count matrix and its corresponding metadata into a DESeqDataSet `dds`, conduct the PseuLME by running the following code:
 ```r
+data(dds)
 res = fit_PseuLME(dds, 
                   cell_type_accessor = 'cluster_coarse', 
                   condition_accessor = 'condition', 
