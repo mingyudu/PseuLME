@@ -2,8 +2,6 @@
 
 ## Installation
 PseuLME depends on a few other R packages: DESeq2, lme4, multcomp, stats, and SummarizedExperiment.
-
-Install the VINTAGE R package maintained in github through the `devtools` package.
 ```r
 if(!require(devtools))
   install.packages(devtools)
@@ -13,7 +11,7 @@ library(PseuLME)
 
 ## How to use
 
-Check the document of the functions in the package by running following code:
+After installing the package, check the document of the functions in this R package by running the following code:
 ```r
 # main function
 ?fit_PseuLME
@@ -26,7 +24,7 @@ Check the document of the functions in the package by running following code:
 ?lme_pvals
 ```
 
-After put the raw count matrix and the corresponding metadata into `dds`, you can conduct the differential expression analysis using the following code:
+After put the raw count matrix and its corresponding metadata into a DESeqDataSet `dds`, conduct the PseuLME by running the following code:
 ```r
 res = fit_PseuLME(dds, 
                   cell_type_accessor = 'cluster_coarse', 
