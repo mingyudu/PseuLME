@@ -2,7 +2,7 @@
 
 ## Overview
 
-**PseuLME** is an R package designed for differential expression analysis of single-cell RNA-seq data using a pseudobulk approach combined with linear mixed-effects models. 
+**PseuLME** is an R package designed for differential expression analysis of single-cell omics data using a pseudobulk approach combined with linear mixed-effects models. 
 
 ---
 
