@@ -1,0 +1,23 @@
+Package: PseuLME
+Type: Package
+Title: Differential Expression Analysis Using Pseudobulk and Linear Mixed-Effects Models on Single-Cell Omics Data
+Version: 0.1.0
+Author: Mingyu Du
+Maintainer: Mingyu Du <mingyd1@uci.edu>
+Description: PseuLME provides a streamlined workflow for differential expression (DE) analysis in single-cell omics data. 
+  The package facilitates the creation of pseudobulk datasets, gene and sample filtering, and performs DE 
+  analysis using linear mixed-effects models (LME) to account for batch effects. 
+  Key features include subclustering of cell types, pseudobulk conversion, gene and sample filtering, and statistical 
+  testing with post-hoc comparisons.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+  DESeq2, 
+  lme4, 
+  multcomp, 
+  stats, 
+  SummarizedExperiment
+Depends:
+  R 
+RoxygenNote: 7.2.3
