@@ -37,7 +37,7 @@ After installing the package, you can view the documentation for the main and he
 ?lme_pvals
 ```
 
-To conduct differential expression analysis using PseuLME, prepare a `DESeqDataSet` object (`dds`) containing your raw count matrix and corresponding metadata. Then, run the following code:
+To conduct differential expression analysis using PseuLME, prepare a `DESeqDataSet` object (`dds`) containing your raw count matrix at single cell level and corresponding metadata. Then, run the algorithm. Here is an example code:
 
 ```r
 data(dds)
@@ -84,3 +84,4 @@ The result, `res`, is a named list where each element corresponds to a cell type
 - **`log2fc`**: Log2 fold change between `contrast2` and `contrast1`.
 - **`pvals`**: P-values from the differential expression test.
 - **`padjs`**: FDR-adjusted p-values using the Benjamini-Hochberg method.
+- **`gene`**: Name of genes.
