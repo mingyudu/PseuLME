@@ -88,6 +88,7 @@ filter_low_celltypes<-function(dds,sample,threshold=50){
 #' @param dds A `DESeqDataSet` object containing single-cell count data for an individual cell type.
 #' @param sample_accessor A character string specifying the column name in `colData(dds)`
 #'    that contains sample labels.
+#' @param condition_accessor A character string specifying the column name in `colData(dds)` that identifies condition labels (e.g., treatment vs. control).
 #' @param design A formula or matrix specifying the experimental design.
 #'    The formula defines how the counts for each gene depend on the variables
 #'    in `colData(dds)`. Default is `~1` (intercept only).
@@ -95,7 +96,7 @@ filter_low_celltypes<-function(dds,sample,threshold=50){
 #' @return A `DESeqDataSet` object with pseudobulk-level counts aggregated by sample.
 #' @export
 #' @import DESeq2 SummarizedExperiment
-convert_to_pseudobulk_modified<-function(dds,sample_accessor,design=NULL){
+convert_to_pseudobulk_modified<-function(dds,sample_accessor,condition_accessor, design=NULL){
   dds$combined=colData(dds)[sample_accessor][,1]
   colnam=colnames(colData(dds))
   metadata=data.frame(c())
@@ -134,8 +135,11 @@ convert_to_pseudobulk_modified<-function(dds,sample_accessor,design=NULL){
   colnames(pseudobulk)<-samples
   colnames(metadata)<-colnam
 
+  if(!condition_accessor %in% colnames(colData(dds))){
+    stop('The condition_accessor is not in the metadata.')
+  }
   if (is.null(design)){
-    design=~1
+    design=as.formula(paste0('~',condition_accessor))
   }
   dds_new<-DESeqDataSetFromMatrix(countData = pseudobulk,
                                   colData = metadata,
@@ -164,10 +168,6 @@ convert_to_pseudobulk_modified<-function(dds,sample_accessor,design=NULL){
 #' @import DESeq2 lme4 multcomp stats SummarizedExperiment
 lme_pvals<-function(dds,condition_accessor,batch_accessor,
                     contrast1,contrast2){
-  if(!condition_accessor %in% colnames(colData(dds))){
-    stop('The condition_accessor is not in the metadata.')
-  }
-  design(dds) = as.formula(paste("~1+", condition_accessor))
   dds<-estimateSizeFactors(dds)
   base = rep(NA,dim(dds)[1])
   diff = rep(NA,dim(dds)[1])
@@ -260,7 +260,7 @@ fit_PseuLME <- function(dds, cell_type_accessor, condition_accessor,
   # Convert to pseudobulk counts
   subclusters_pseudo<-subclusters
   for (k in 1:length(subclusters)){
-    try(subclusters_pseudo[[k]]<-convert_to_pseudobulk_modified(subclusters[[k]], sample_accessor))
+    try(subclusters_pseudo[[k]]<-convert_to_pseudobulk_modified(subclusters[[k]], sample_accessor, condition_accessor))
   }
 
   # DE

@@ -4,13 +4,20 @@
 \alias{convert_to_pseudobulk_modified}
 \title{Convert Single-cell Count Matrix to Pseudobulk Matrix for a Individual Cell Type}
 \usage{
-convert_to_pseudobulk_modified(dds, sample_accessor, design = NULL)
+convert_to_pseudobulk_modified(
+  dds,
+  sample_accessor,
+  condition_accessor,
+  design = NULL
+)
 }
 \arguments{
 \item{dds}{A `DESeqDataSet` object containing single-cell count data for an individual cell type.}
 
 \item{sample_accessor}{A character string specifying the column name in `colData(dds)`
 that contains sample labels.}
+
+\item{condition_accessor}{A character string specifying the column name in `colData(dds)` that identifies condition labels (e.g., treatment vs. control).}
 
 \item{design}{A formula or matrix specifying the experimental design.
 The formula defines how the counts for each gene depend on the variables
