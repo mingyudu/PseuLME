@@ -164,6 +164,10 @@ convert_to_pseudobulk_modified<-function(dds,sample_accessor,design=NULL){
 #' @import DESeq2 lme4 multcomp stats SummarizedExperiment
 lme_pvals<-function(dds,condition_accessor,batch_accessor,
                     contrast1,contrast2){
+  if(!condition_accessor %in% colnames(colData(dds))){
+    stop('The condition_accessor is not in the metadata.')
+  }
+  design(dds) = as.formula(paste("~1+", condition_accessor))
   dds<-estimateSizeFactors(dds)
   base = rep(NA,dim(dds)[1])
   diff = rep(NA,dim(dds)[1])
