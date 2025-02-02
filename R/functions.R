@@ -264,7 +264,7 @@ fit_PseuLME <- function(dds, cell_type_accessor, condition_accessor,
   # Convert to pseudobulk counts
   subclusters_pseudo<-subclusters[sapply(subclusters, function(subcluster) length(unique(colData(subcluster)[sample_accessor][,1])) > 1)]
   rm_lst = NULL
-  for (k in 1:length(subclusters)){
+  for (k in 1:length(subclusters_pseudo)){
     try(subclusters_pseudo[[k]]<-convert_to_pseudobulk_modified(subclusters[[k]], sample_accessor, condition_accessor))
     print(names(subclusters_pseudo)[k])
     print(dim(subclusters_pseudo[[k]])[2])
