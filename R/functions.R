@@ -118,7 +118,7 @@ convert_to_pseudobulk_modified<-function(dds,sample_accessor,condition_accessor,
   metadata=rbind(metadata,t(data.frame(batch_data)))
 
   # Construct pseudobulk counts
-  if(length(samples)>1){
+  if(length(samples)==1){
     stop('There is only 1 sample in the analysis.')
   }
   for (j in 2:length(samples)){
@@ -262,7 +262,8 @@ fit_PseuLME <- function(dds, cell_type_accessor, condition_accessor,
   }
 
   # Convert to pseudobulk counts
-  subclusters_pseudo<-subclusters[sapply(subclusters, function(subcluster) length(unique(colData(subcluster)[sample_accessor][,1])) > 1)]
+  subclusters_pseudo<-subclusters[sapply(subclusters,
+                                         function(subcluster) length(unique(colData(subcluster)[sample_accessor][,1])) > 1)]
   rm_lst = NULL
   for (k in 1:length(subclusters_pseudo)){
     try(subclusters_pseudo[[k]]<-convert_to_pseudobulk_modified(subclusters[[k]], sample_accessor, condition_accessor))
