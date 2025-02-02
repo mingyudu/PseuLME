@@ -280,6 +280,11 @@ fit_PseuLME <- function(dds, cell_type_accessor, condition_accessor,
     )
   })
   names(res) <- names(subclusters_pseudo)
+
+  if(!is.null(rm_lst)){
+    message('The following cluster(s) got removed:', paste(rm_lst, collapse = ','))
+  }
+
   return(res)
 }
 
