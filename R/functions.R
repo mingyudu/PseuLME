@@ -259,9 +259,18 @@ fit_PseuLME <- function(dds, cell_type_accessor, condition_accessor,
 
   # Convert to pseudobulk counts
   subclusters_pseudo<-subclusters
+  rm_lst = NULL
   for (k in 1:length(subclusters)){
     try(subclusters_pseudo[[k]]<-convert_to_pseudobulk_modified(subclusters[[k]], sample_accessor, condition_accessor))
+    print(names(subclusters_pseudo)[k])
+    print(dim(subclusters_pseudo[[k]])[2])
+    if(dim(subclusters_pseudo[[k]])[2]<6){
+      rm_lst = c(rm_lst, names(subclusters_pseudo)[k])
+      print(paste0(names(subclusters_pseudo)[k], ' cluster does not have enough cells, so it should be remove!'))
+    }
   }
+
+  subclusters_pseudo <- subclusters_pseudo[sapply(subclusters_pseudo, function(dds) dim(dds)[2] >= 6)]
 
   # DE
   res <- lapply(subclusters_pseudo, function(subcluster) {
@@ -270,7 +279,7 @@ fit_PseuLME <- function(dds, cell_type_accessor, condition_accessor,
       error = function(e) NULL
     )
   })
-  names(res) <- names(subclusters)
+  names(res) <- names(subclusters_pseudo)
   return(res)
 }
 
