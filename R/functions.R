@@ -262,15 +262,23 @@ fit_PseuLME <- function(dds, cell_type_accessor, condition_accessor,
   }
 
   # Convert to pseudobulk counts
+  for (i in 1:length(subclusters)) {
+    subcluster = subclusters[[i]]
+    n_samples = length(unique(colData(subcluster)[sample_accessor][,1]))
+    if (n_samples > 1){
+      print(paste0(names(subclusters)[i], ' cluster only has 1 sample, so it should be removed.'))
+    }
+  }
   subclusters_pseudo<-subclusters[sapply(subclusters,
                                          function(subcluster) length(unique(colData(subcluster)[sample_accessor][,1])) > 1)]
-  rm_lst = NULL
+
   for (k in 1:length(subclusters_pseudo)){
     try(subclusters_pseudo[[k]]<-convert_to_pseudobulk_modified(subclusters_pseudo[[k]], sample_accessor, condition_accessor))
+
     print(names(subclusters_pseudo)[k])
     print(dim(subclusters_pseudo[[k]])[2])
+
     if(dim(subclusters_pseudo[[k]])[2]<6){
-      rm_lst = c(rm_lst, names(subclusters_pseudo)[k])
       print(paste0(names(subclusters_pseudo)[k], ' cluster does not have enough cells, so it should be remove!'))
     }
   }
@@ -285,11 +293,6 @@ fit_PseuLME <- function(dds, cell_type_accessor, condition_accessor,
     )
   })
   names(res) <- names(subclusters_pseudo)
-
-  if(!is.null(rm_lst)){
-    message('The following cluster(s) got removed:', paste(rm_lst, collapse = ','))
-  }
-
   return(res)
 }
 
