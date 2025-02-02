@@ -265,7 +265,7 @@ fit_PseuLME <- function(dds, cell_type_accessor, condition_accessor,
   for (i in 1:length(subclusters)) {
     subcluster = subclusters[[i]]
     n_samples = length(unique(colData(subcluster)[sample_accessor][,1]))
-    if (n_samples > 1){
+    if (n_samples == 1){
       print(paste0(names(subclusters)[i], ' cluster only has 1 sample, so it should be removed.'))
     }
   }
