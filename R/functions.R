@@ -118,18 +118,20 @@ convert_to_pseudobulk_modified<-function(dds,sample_accessor,condition_accessor,
   metadata=rbind(metadata,t(data.frame(batch_data)))
 
   # Construct pseudobulk counts
-  for (j in 2:length(samples)){
-    ind=which(dds$combined==samples[j])
-    pseudobulk=cbind(pseudobulk,data.frame(rowSums(assays(dds)$counts[,ind])))
-    batch_data=c()
-    for (k in 1:length(colnam)){
-      if (is.factor(colData(dds)[colnam[k]][,1])){
-        batch_data=c(batch_data,levels(colData(dds)[colnam[k]][,1])[colData(dds)[colnam[k]][ind[1],1]])
-      } else{
-        batch_data=c(batch_data,colData(dds)[colnam[k]][ind[1],1])
+  if(length(samples)>1){
+    for (j in 2:length(samples)){
+      ind=which(dds$combined==samples[j])
+      pseudobulk=cbind(pseudobulk,data.frame(rowSums(assays(dds)$counts[,ind])))
+      batch_data=c()
+      for (k in 1:length(colnam)){
+        if (is.factor(colData(dds)[colnam[k]][,1])){
+          batch_data=c(batch_data,levels(colData(dds)[colnam[k]][,1])[colData(dds)[colnam[k]][ind[1],1]])
+        } else{
+          batch_data=c(batch_data,colData(dds)[colnam[k]][ind[1],1])
+        }
       }
+      metadata=rbind(metadata,t(data.frame(batch_data)))
     }
-    metadata=rbind(metadata,t(data.frame(batch_data)))
   }
   rownames(metadata)<-samples
   colnames(pseudobulk)<-samples
