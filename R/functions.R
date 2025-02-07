@@ -175,6 +175,8 @@ lme_pvals<-function(dds,condition_accessor,batch_accessor,
   dds<-estimateSizeFactors(dds)
   base = rep(NA,dim(dds)[1])
   diff = rep(NA,dim(dds)[1])
+  sigma = rep(NA,dim(dds)[1])
+  tstat = rep(NA,dim(dds)[1])
   pvals=rep(NA,dim(dds)[1])
   for (k in 1:dim(dds)[1]){
     # Normalize counts using DESeq2 size factor
@@ -205,9 +207,13 @@ lme_pvals<-function(dds,condition_accessor,batch_accessor,
 
     if (!is.numeric(temp)){
       diff[[k]]<-test$test$coefficients[paste0(contrast1,' - ',contrast2)]
+      sigma[[k]]<-test$test$sigma[paste0(contrast1,' - ',contrast2)]
+      tstat[[k]]<-test$test$tstat[paste0(contrast1,' - ',contrast2)]
       pvals[[k]]<-test$test$pvalues[paste0(contrast1,' - ',contrast2)]
       if (is.na(pvals[[k]])){
         diff[[k]]<-test$test$coefficients[paste0(contrast2,' - ',contrast1)]
+        sigma[[k]]<-test$test$sigma[paste0(contrast2,' - ',contrast1)]
+        tstat[[k]]<-test$test$tstat[paste0(contrast2,' - ',contrast1)]
         pvals[[k]]<-test$test$pvalues[paste0(contrast2,' - ',contrast1)]
       }
 
@@ -216,7 +222,7 @@ lme_pvals<-function(dds,condition_accessor,batch_accessor,
   pvals[is.na(pvals)]=1
   # BH multiple testing correction
   padjs = p.adjust(pvals, method = 'BH')
-  df = data.frame(base = base, log2fc = diff, pvals = pvals, padjs = padjs)
+  df = data.frame(base = base, log2fc = diff, sigma = sigma, tstat = tstat, pvals = pvals, padjs = padjs)
   rownames(df) = rownames(dds)
   df$gene = rownames(df)
   df = df[order(df$padjs),]
