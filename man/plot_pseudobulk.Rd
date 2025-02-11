@@ -2,24 +2,24 @@
 % Please edit documentation in R/functions.R
 \name{plot_pseudobulk}
 \alias{plot_pseudobulk}
-\title{Draw Pseudobulk Expression}
+\title{Plot Pseudobulk Gene Expression}
 \usage{
 plot_pseudobulk(dds, contrast1, contrast2, gene, log2 = FALSE)
 }
 \arguments{
-\item{dds}{A `DESeqDataSet` object containing single-cell or pseudobulk count data.}
+\item{dds}{A `DESeqDataSet` object containing pseudobulk count data for the gene of interest.}
 
-\item{contrast1}{A character string representing the label of the control group in the condition column.}
+\item{contrast1}{A character string representing the control group label in the condition column.}
 
-\item{contrast2}{A character string representing the label of the case group in the condition column.}
+\item{contrast2}{A character string representing the case group label in the condition column.}
 
-\item{gene}{A character string of the gene name of interest.}
+\item{gene}{A character string indicating the gene name of interest.}
 
-\item{log2}{A binary value showing whether the expression is log2-transformed.}
+\item{log2}{A logical value showing whether to log2-transform the expression values (default: FALSE).}
 }
 \value{
-ggplot of psuedobulk expression
+A ggplot object showing psuedobulk gene expression between 2 conditions.
 }
 \description{
-Draw Pseudobulk Expression
+Generate a plot of pseudobulk gene expression between 2 conditions.
 }

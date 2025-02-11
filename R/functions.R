@@ -302,17 +302,17 @@ fit_PseuLME <- function(dds, cell_type_accessor, condition_accessor,
   return(res)
 }
 
-#' Draw Pseudobulk Expression
+#' Plot Pseudobulk Gene Expression
 #'
-#' Draw Pseudobulk Expression
+#' Generate a plot of pseudobulk gene expression between 2 conditions.
 #'
-#' @param dds A `DESeqDataSet` object containing single-cell or pseudobulk count data.
-#' @param contrast1 A character string representing the label of the control group in the condition column.
-#' @param contrast2 A character string representing the label of the case group in the condition column.
-#' @param gene A character string of the gene name of interest.
-#' @param log2 A binary value showing whether the expression is log2-transformed.
+#' @param dds A `DESeqDataSet` object containing pseudobulk count data for the gene of interest.
+#' @param contrast1 A character string representing the control group label in the condition column.
+#' @param contrast2 A character string representing the case group label in the condition column.
+#' @param gene A character string indicating the gene name of interest.
+#' @param log2 A logical value showing whether to log2-transform the expression values (default: FALSE).
 #'
-#' @return ggplot of psuedobulk expression
+#' @return A ggplot object showing psuedobulk gene expression between 2 conditions.
 #' @export
 #' @import DESeq2 dplyr ggplot2
 plot_pseudobulk <- function(dds, contrast1, contrast2, gene, log2 = FALSE){
@@ -333,17 +333,19 @@ plot_pseudobulk <- function(dds, contrast1, contrast2, gene, log2 = FALSE){
                  group = factor(assay_id),
                  col = factor(assay_id))) +
       geom_line() +
-      theme_bw(base_size = 15) +
-      labs(col = 'assay_id') +
-      ggtitle(paste0('Log2-transformed Normalized Pseudobulk: ', gene))
+      geom_point() +
+      theme_classic(base_size = 15) +
+      labs(col = 'assay_id', y = 'Log2 Normalized Pseudobulk') +
+      ggtitle(gene)
   }else{
     data %>%
       ggplot(aes(x=condition, y=gene,
                  group = factor(assay_id),
                  col = factor(assay_id))) +
       geom_line() +
-      theme_bw(base_size = 15) +
-      labs(col = 'assay_id') +
-      ggtitle(paste0('Normalized Pseudobulk: ', gene))
+      geom_point() +
+      theme_classic(base_size = 15) +
+      labs(col = 'assay_id', y = 'Normalized Pseudobulk') +
+      ggtitle(gene)
   }
 }
