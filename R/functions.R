@@ -302,4 +302,48 @@ fit_PseuLME <- function(dds, cell_type_accessor, condition_accessor,
   return(res)
 }
 
+#' Draw Pseudobulk Expression
+#'
+#' Draw Pseudobulk Expression
+#'
+#' @param dds A `DESeqDataSet` object containing single-cell or pseudobulk count data.
+#' @param contrast1 A character string representing the label of the control group in the condition column.
+#' @param contrast2 A character string representing the label of the case group in the condition column.
+#' @param gene A character string of the gene name of interest.
+#' @param log2 A binary value showing whether the expression is log2-transformed.
+#'
+#' @return ggplot of psuedobulk expression
+#' @export
+#' @import DESeq2 dplyr ggplot2
+plot_pseudobulk <- function(dds, contrast1, contrast2, gene, log2 = FALSE){
+  dds<-estimateSizeFactors(dds)
+  k = which(rownames(dds)==gene)
+  data=data.frame(assays(dds)$counts[rownames(dds)[k],])/sizeFactors(dds)
+  colnames(data)<-'gene'
+  data$log2_gene = log2(data$gene+1)
 
+  data$condition=factor(dds$condition)
+  data$assay_id=as.numeric(dds$assay_id)
+  data<-data[data$condition %in% c(contrast1,contrast2),]
+  data$condition = factor(data$condition, levels = c(contrast1, contrast2))
+
+  if(log2){
+    data %>%
+      ggplot(aes(x=condition, y=log2_gene,
+                 group = factor(assay_id),
+                 col = factor(assay_id))) +
+      geom_line() +
+      theme_bw(base_size = 15) +
+      labs(col = 'assay_id') +
+      ggtitle(paste0('Log2-transformed Normalized Pseudobulk: ', gene))
+  }else{
+    data %>%
+      ggplot(aes(x=condition, y=gene,
+                 group = factor(assay_id),
+                 col = factor(assay_id))) +
+      geom_line() +
+      theme_bw(base_size = 15) +
+      labs(col = 'assay_id') +
+      ggtitle(paste0('Normalized Pseudobulk: ', gene))
+  }
+}
