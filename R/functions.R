@@ -306,7 +306,7 @@ fit_PseuLME <- function(dds, cell_type_accessor, condition_accessor,
 #'
 #' Generate a plot of pseudobulk gene expression between 2 conditions.
 #'
-#' @param dds A `DESeqDataSet` object containing pseudobulk count data for the gene of interest.
+#' @param dds A `DESeqDataSet` object containing pseudobulk count matrix of a specific cell type.
 #' @param contrast1 A character string representing the control group label in the condition column.
 #' @param contrast2 A character string representing the case group label in the condition column.
 #' @param gene A character string indicating the gene name of interest.
@@ -327,23 +327,27 @@ plot_pseudobulk <- function(dds, contrast1, contrast2, gene, log2 = FALSE){
   data<-data[data$condition %in% c(contrast1,contrast2),]
   data$condition = factor(data$condition, levels = c(contrast1, contrast2))
 
+  valid_assay_ids <- data %>%
+    group_by(assay_id) %>%
+    filter(n_distinct(condition) == 2) %>%
+    pull(assay_id) %>%
+    unique()
+
   if(log2){
     data %>%
-      ggplot(aes(x=condition, y=log2_gene,
-                 group = factor(assay_id),
-                 col = factor(assay_id))) +
-      geom_line() +
-      geom_point() +
+      ggplot(aes(x=condition, y=log2_gene)) +
+      geom_point(aes(col = factor(assay_id)), size = 3) +
+      geom_line(data = data %>% filter(assay_id %in% valid_assay_ids),
+                aes(group = factor(assay_id))) +
       theme_classic(base_size = 15) +
       labs(col = 'assay_id', y = 'Log2 Normalized Pseudobulk') +
       ggtitle(gene)
   }else{
     data %>%
-      ggplot(aes(x=condition, y=gene,
-                 group = factor(assay_id),
-                 col = factor(assay_id))) +
-      geom_line() +
-      geom_point() +
+      ggplot(aes(x=condition, y=gene)) +
+      geom_point(aes(col = factor(assay_id)), size = 3) +
+      geom_line(data = data %>% filter(assay_id %in% valid_assay_ids),
+                aes(group = factor(assay_id))) +
       theme_classic(base_size = 15) +
       labs(col = 'assay_id', y = 'Normalized Pseudobulk') +
       ggtitle(gene)

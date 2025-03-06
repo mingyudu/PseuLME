@@ -7,7 +7,7 @@
 plot_pseudobulk(dds, contrast1, contrast2, gene, log2 = FALSE)
 }
 \arguments{
-\item{dds}{A `DESeqDataSet` object containing pseudobulk count data for the gene of interest.}
+\item{dds}{A `DESeqDataSet` object containing pseudobulk count matrix of a specific cell type.}
 
 \item{contrast1}{A character string representing the control group label in the condition column.}
 
