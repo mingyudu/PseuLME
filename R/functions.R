@@ -322,16 +322,22 @@ plot_pseudobulk <- function(dds, contrast1, contrast2, gene, log2 = FALSE){
   colnames(data)<-'gene'
   data$log2_gene = log2(data$gene+1)
 
+  print('test 1!')
   data$condition=factor(dds$condition)
+  print('test 2!')
   data$assay_id=as.numeric(dds$assay_id)
   data<-data[data$condition %in% c(contrast1,contrast2),]
+  print('test 3!')
   data$condition = factor(data$condition, levels = c(contrast1, contrast2))
+  print('test 4!')
 
+  print('test 5!')
   valid_assay_ids <- data %>%
     group_by(assay_id) %>%
     filter(n_distinct(condition) == 2) %>%
     pull(assay_id) %>%
     unique()
+  print('test 6!')
 
   if(log2){
     data %>%
