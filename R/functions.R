@@ -332,7 +332,7 @@ plot_pseudobulk <- function(dds, contrast1, contrast2, gene, log2 = FALSE){
   print('test 4!')
 
   print('test 5!')
-  print(data$condition[1:10])
+  print(data)
   valid_assay_ids <- data %>%
     group_by(assay_id) %>%
     filter(n_distinct(condition) == 2) %>%
