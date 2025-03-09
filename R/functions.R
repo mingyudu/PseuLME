@@ -316,30 +316,26 @@ fit_PseuLME <- function(dds, cell_type_accessor, condition_accessor,
 #' @export
 #' @import DESeq2 dplyr ggplot2
 plot_pseudobulk <- function(dds, contrast1, contrast2, gene, log2 = FALSE){
+  # Normalize expression
   dds<-estimateSizeFactors(dds)
   k = which(rownames(dds)==gene)
   data=data.frame(assays(dds)$counts[rownames(dds)[k],])/sizeFactors(dds)
   colnames(data)<-'gene'
   data$log2_gene = log2(data$gene+1)
 
+  # Extract metadata for batch(assay) id and condition id
   data$assay_id=factor(as.numeric(dds$assay_id))
   data$condition = factor(dds$condition, levels = c(contrast1, contrast2))
 
-  print(data)
+  # get the batches with a paired match
   tab = table(data$assay_id, data$condition)
   valid_assay_ids = as.numeric(rownames(tab)[rowSums(tab == 1)==2])
-  print('valid assay_ids:')
-  print(valid_assay_ids)
-
-  print('data2:')
-  data2 = data %>%
-    dplyr::filter(assay_id %in% valid_assay_ids)
-  print(data2)
 
   data %>%
     ggplot(aes(x=condition, y=gene)) +
     geom_point(aes(col = assay_id), size = 3) +
-    geom_line(data = data2,
+    geom_line(data = data %>%
+                dplyr::filter(assay_id %in% valid_assay_ids),
               aes(group = assay_id)) +
     theme_classic(base_size = 15) +
     labs(col = 'assay_id', y = 'Normalized Pseudobulk') +
