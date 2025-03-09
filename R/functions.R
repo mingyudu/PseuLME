@@ -349,6 +349,7 @@ plot_pseudobulk <- function(dds, contrast1, contrast2, gene, log2 = FALSE){
   #   geom_point() +
   #   geom_line()
   data2 = data %>% filter(assay_id %in% valid_assay_ids)
+  print(data2)
   data %>%
     ggplot(aes(x=condition, y=gene)) +
     geom_point(aes(col = assay_id), size = 3) +
