@@ -353,7 +353,7 @@ plot_pseudobulk <- function(dds, contrast1, contrast2, gene, log2 = FALSE){
     ggplot(aes(x=condition, y=gene)) +
     geom_point(aes(col = assay_id), size = 3) +
     geom_line(data = data2,
-              aes(group = assay_id), inherit.aes = FALSE) +
+              aes(x=condition, y=gene, group = assay_id), inherit.aes = FALSE) +
     theme_classic(base_size = 15) +
     labs(col = 'assay_id', y = 'Normalized Pseudobulk') +
     ggtitle(gene)
