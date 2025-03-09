@@ -331,33 +331,26 @@ plot_pseudobulk <- function(dds, contrast1, contrast2, gene, log2 = FALSE){
   tab = table(data$assay_id, data$condition)
   valid_assay_ids = as.numeric(rownames(tab)[rowSums(tab == 1)==2])
 
-  data %>%
-    ggplot(aes(x=condition, y=gene)) +
-    geom_point(aes(col = assay_id), size = 3) +
-    geom_line(data = data %>%
-                dplyr::filter(assay_id %in% valid_assay_ids),
-              aes(group = assay_id)) +
-    theme_classic(base_size = 15) +
-    labs(col = 'assay_id', y = 'Normalized Pseudobulk') +
-    ggtitle(gene)
-
-  # if(log2){
-  #   data %>%
-  #     ggplot(aes(x=condition, y=log2_gene)) +
-  #     geom_point(aes(col = factor(assay_id)), size = 3) +
-  #     geom_line(data = data %>% filter(assay_id %in% valid_assay_ids),
-  #               aes(group = factor(assay_id))) +
-  #     theme_classic(base_size = 15) +
-  #     labs(col = 'assay_id', y = 'Log2 Normalized Pseudobulk') +
-  #     ggtitle(gene)
-  # }else{
-  #   data %>%
-  #     ggplot(aes(x=condition, y=gene)) +
-  #     geom_point(aes(col = factor(assay_id)), size = 3) +
-  #     geom_line(data = data %>% filter(assay_id %in% valid_assay_ids),
-  #               aes(group = factor(assay_id))) +
-  #     theme_classic(base_size = 15) +
-  #     labs(col = 'assay_id', y = 'Normalized Pseudobulk') +
-  #     ggtitle(gene)
-  # }
+  # Plot
+  if(log2){
+    data %>%
+      ggplot(aes(x=condition, y=log2_gene)) +
+      geom_point(aes(col = assay_id), size = 3) +
+      geom_line(data = data %>%
+                  dplyr::filter(assay_id %in% valid_assay_ids),
+                aes(group = assay_id)) +
+      theme_classic(base_size = 15) +
+      labs(col = 'assay_id', y = 'Log2 Normalized Pseudobulk') +
+      ggtitle(gene)
+  }else{
+    data %>%
+      ggplot(aes(x=condition, y=gene)) +
+      geom_point(aes(col = assay_id), size = 3) +
+      geom_line(data = data %>%
+                  dplyr::filter(assay_id %in% valid_assay_ids),
+                aes(group = assay_id)) +
+      theme_classic(base_size = 15) +
+      labs(col = 'assay_id', y = 'Normalized Pseudobulk') +
+      ggtitle(gene)
+  }
 }
