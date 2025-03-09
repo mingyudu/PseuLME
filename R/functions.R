@@ -322,32 +322,15 @@ plot_pseudobulk <- function(dds, contrast1, contrast2, gene, log2 = FALSE){
   colnames(data)<-'gene'
   data$log2_gene = log2(data$gene+1)
 
-  print('test 1!')
-  # data$condition=factor(dds$condition)
-  print('test 2!')
   data$assay_id=factor(as.numeric(dds$assay_id))
-  # data<-data[data$condition %in% c(contrast1,contrast2),]
-  print('test 3!')
   data$condition = factor(dds$condition, levels = c(contrast1, contrast2))
-  print('test 4!')
 
-  print('test 5!')
   print(data)
   tab = table(data$assay_id, data$condition)
   valid_assay_ids = as.numeric(rownames(tab)[rowSums(tab == 1)==2])
   print('valid assay_ids:')
   print(valid_assay_ids)
-  # valid_assay_ids <- data %>%
-  #   group_by(assay_id) %>%
-  #   filter(n_distinct(condition) == 2) %>%
-  #   pull(assay_id) %>%
-  #   unique()
-  print('test 6!')
 
-  # data %>%
-  #   ggplot(aes(x=condition, y=gene, color = factor(assay_id))) +
-  #   geom_point() +
-  #   geom_line()
   print('data2:')
   data2 = data %>%
     dplyr::filter(assay_id %in% valid_assay_ids)
@@ -357,7 +340,7 @@ plot_pseudobulk <- function(dds, contrast1, contrast2, gene, log2 = FALSE){
     ggplot(aes(x=condition, y=gene)) +
     geom_point(aes(col = assay_id), size = 3) +
     geom_line(data = data2,
-              aes(x=condition, y=gene, group = assay_id), inherit.aes = FALSE) +
+              aes(x=condition, y=gene, group = assay_id)) +
     theme_classic(base_size = 15) +
     labs(col = 'assay_id', y = 'Normalized Pseudobulk') +
     ggtitle(gene)
